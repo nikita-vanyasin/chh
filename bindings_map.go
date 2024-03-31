@@ -22,8 +22,3 @@ func (b *BindingMap[K, V]) Write() {
 		*s = b.col.Row(0)
 	}
 }
-
-func (r *ColResults) BindMapStringToFloat32(name string, valPtr interface{}) {
-	col := proto.NewMap[string, float32](&proto.ColStr{}, &proto.ColFloat32{})
-	r.Bind(name, col, &BindingMap[string, float32]{col: col, valPtr: valPtr})
-}

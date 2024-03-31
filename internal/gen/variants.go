@@ -372,3 +372,39 @@ func getVariants() Variants {
 	}
 	return variants
 }
+
+type MapVariant struct {
+	key Variant
+	val Variant
+}
+
+func (m MapVariant) Key() string {
+	return m.key.Name()
+}
+
+func (m MapVariant) Value() string {
+	return m.val.Name()
+}
+
+func (m MapVariant) GoKey() string {
+	return m.key.GoName()
+}
+
+func (m MapVariant) GoValue() string {
+	return m.val.GoName()
+}
+
+func getMapVariants() []MapVariant {
+	// all combinations:
+	base := getVariants()
+	variants := make([]MapVariant, 0, len(base)*len(base))
+	for _, key := range base {
+		for _, val := range base {
+			variants = append(variants, MapVariant{
+				key: key,
+				val: val,
+			})
+		}
+	}
+	return variants
+}

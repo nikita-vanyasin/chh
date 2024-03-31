@@ -10,9 +10,14 @@ import (
 func main() {
 	buf := bytes.Buffer{}
 
-	data := getVariants()
-	t := template.Must(template.New("bindings").Parse(bindgingsTmpl))
-	err := t.Execute(&buf, data)
+	t := template.Must(template.New("bindings").Parse(bindingsTmpl))
+	err := t.Execute(&buf, struct {
+		Main    []Variant
+		MapVars []MapVariant
+	}{
+		Main:    getVariants(),
+		MapVars: getMapVariants(),
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -21,17 +26,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
 
-var bindgingsTmpl = `
-package chh
+var bindingsTmpl = `package chh
 
 import (
     "time"
 
 	"github.com/ClickHouse/ch-go/proto"
 )
-{{range .}}
+{{range .Main}}
 // -- type {{ .Name }}
 
 func (r *ColResults) Bind{{.Name}}(name string, valPtr interface{}) {
@@ -54,6 +59,14 @@ func (b *binding{{.Type}}) Write() {
 		s, _ := b.valPtr.(*{{.GoName}})
 		*s = b.col.Row(0)
 	}
+}
+{{end}}
+// -- type Map[K]V
+
+{{range .MapVars}}
+func (r *ColResults) BindMap{{.Key}}To{{.Value}}(name string, valPtr interface{}) {
+	col := proto.NewMap[{{.GoKey}}, {{.GoValue}}](&proto.Col{{.Key}}{}, &proto.Col{{.Value}}{})
+	r.Bind(name, col, &BindingMap[{{.GoKey}}, {{.GoValue}}]{col: col, valPtr: valPtr})
 }
 {{end}}
 `
