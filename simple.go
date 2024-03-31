@@ -6,6 +6,8 @@ import (
 	"github.com/ClickHouse/ch-go"
 )
 
+//go:generate go run ./internal/gen
+
 type Doer interface {
 	Do(ctx context.Context, q ch.Query) (err error)
 }

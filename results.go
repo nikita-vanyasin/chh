@@ -32,28 +32,3 @@ func (r *ColResults) Bind(name string, col proto.ColResult, binding ColumnBindin
 	r.results = append(r.results, proto.ResultColumn{Name: name, Data: col})
 	r.bindings[name] = binding
 }
-
-func (r *ColResults) BindMapStringToFloat32(name string, valPtr interface{}) {
-	col := proto.NewMap[string, float32](&proto.ColStr{}, &proto.ColFloat32{})
-	r.Bind(name, col, &bindingMap[string, float32]{col: col, valPtr: valPtr})
-}
-
-func (r *ColResults) BindString(name string, valPtr interface{}) {
-	col := &proto.ColStr{}
-	r.Bind(name, col, &bindingString{col: col, valPtr: valPtr})
-}
-
-func (r *ColResults) BindDate(name string, valPtr interface{}) {
-	col := &proto.ColDate{}
-	r.Bind(name, col, &bindingDate{col: col, valPtr: valPtr})
-}
-
-func (r *ColResults) BindUInt64(name string, valPtr interface{}) {
-	col := &proto.ColUInt64{}
-	r.Bind(name, col, &bindingUInt64{col: col, valPtr: valPtr})
-}
-
-func (r *ColResults) BindFloat64(name string, valPtr interface{}) {
-	col := &proto.ColFloat64{}
-	r.Bind(name, col, &bindingFloat64{col: col, valPtr: valPtr})
-}
