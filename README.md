@@ -4,6 +4,10 @@ Small wrapper for https://github.com/ClickHouse/ch-go package to simplify client
 
 Install: `go get github.com/nikita-vanyasin/chh@latest`
 
+
+#### Motivation
+https://vaniasin.com/chh-making-clickhouse-ch-go-user-friendly/
+
 ## Usage example
 
 Select whole result-set:
